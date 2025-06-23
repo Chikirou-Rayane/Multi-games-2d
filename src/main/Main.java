@@ -14,7 +14,7 @@ public class Main {
         frame.setTitle("My ChessGame"); // donner un titre à la fenetre
         frame.setLayout(new GridBagLayout()); // utiliser ce gestionnaire de disposition
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // quand on ferme la fenetre le programme s'arrete
-        frame.getContentPane().setBackground(new Color(155, 207, 213));
+        frame.getContentPane().setBackground(new Color(133, 21, 21));
         frame.setMinimumSize(new Dimension(1000, 1000)); // donner une taille minimal
         frame.setLocationRelativeTo(null); // metre la fenetre au milieu de l'ecran .
         frame.setVisible(true); // montrer la fentre lors de l'execution
