@@ -19,12 +19,21 @@ public class Piece {
             e.printStackTrace();
         }
     }
+
     Image sprite; // on initialise l'image qui va contenir la piece
+
     Board board; // on initialise le plateau
+
     protected int sheetScale = sheet != null ? sheet.getWidth() / 6 : 0; // on défini un ecart pour pouvoir prendre les pieces qu'on veut de la photo
+
     public Piece(Board board) {
         this.board = board;
     }
+
+    public boolean isValidMovement(int col , int row ) {return true ;}
+    public boolean moveCollidesWithPiece(int col , int row ) {return false ;}
+    public boolean isFirstMove = true ;
+
     public void paint(Graphics2D g2d) {
         if (sprite != null) {
             g2d.drawImage(sprite, xPos, yPos, null);

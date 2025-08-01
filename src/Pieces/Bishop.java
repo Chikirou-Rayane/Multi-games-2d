@@ -17,4 +17,43 @@ public class Bishop extends Piece {
             this.sprite = sheet.getSubimage(2*sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.boxSize, board.boxSize, BufferedImage.SCALE_SMOOTH);
         }
     }
+    public boolean isValidMovement( int col , int row ){
+        return Math.abs(this.col - col) == Math.abs(this.row - row)  ; }
+
+    public boolean moveCollidesWithPiece( int col , int row ){
+
+        // up left
+        if ( this.col > col && this.row > row ) {
+            for (int i = 1 ; i < Math.abs(this.col - col) ; i++){
+                if ( board.getPiece( this.row-i , this.col-i) != null ){
+                    return true ; }
+            }
+        }
+
+        // up right
+        if ( this.col < col && this.row > row ) {
+            for (int i = 1 ; i < Math.abs(this.col - col) ; i++){
+                if ( board.getPiece( this.row-i , this.col+i) != null ){
+                    return true ; }
+            }
+        }
+
+        // down left
+        if ( this.col > col && this.row < row ) {
+            for (int i = 1 ; i < Math.abs(this.col - col) ; i++){
+                if ( board.getPiece( this.row+i , this.col-i) != null ){
+                    return true ; }
+            }
+        }
+
+        // down right
+        if ( this.col < col && this.row < row ) {
+            for (int i = 1 ; i < Math.abs(this.col - col) ; i++){
+                if ( board.getPiece( this.row+i , this.col+i) != null ){
+                    return true ; }
+            }
+        }
+        return false ;
+    }
 }
+

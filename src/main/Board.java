@@ -8,15 +8,70 @@ import java.util.ArrayList;
 
 import Pieces.*;
 
+
 public class Board extends JPanel {
-    public int boxSize = 80; // la taille de la cellule
+    public int boxSize = 80;// la taille de la cellule
+
     int rows = 8;
     int columns = 8;
+
+    Input input = new Input(this) ;
+
+    public Piece selectedPiece ;
+
     ArrayList<Piece> pieceList = new ArrayList<>(); // une liste des pieces sur l'echequier
     public Board() { // un constructeur pour l'echequié
         this.setPreferredSize(new Dimension(rows * boxSize, columns * boxSize));
         addPieces();
+        this.addMouseListener(input);
+        this.addMouseMotionListener(input);
+
+
     }
+
+    public Piece getPiece ( int row , int col  ){
+        for (Piece piece : pieceList){
+            if ( piece.row == row && piece.col == col) return piece ;
+        }
+        return null ;
+    }
+
+
+    public void makeMove(Move move) {
+        move.piece.col = move.newCol ;
+        move.piece.row = move.newRow ;
+        move.piece.xPos = move.newCol*boxSize ;
+        move.piece.yPos = move.newRow*boxSize ;
+        move.piece.isFirstMove = false ;
+
+        capture(move);
+    }
+
+    public void capture (Move move){
+        pieceList.remove(move.capture);
+    }
+
+    public boolean isValidMove(Move move){
+
+        if ( sameTeam(move.piece , move.capture )){
+            return false ;
+        }
+        if ( ! (move.piece.isValidMovement(move.newCol,move.newRow))) {
+             return false ; }
+        if ( move.piece.moveCollidesWithPiece(move.newCol,move.newRow)) {
+            return false ; }
+        return true ;
+    }
+
+    public boolean sameTeam( Piece p1 , Piece p2 ) {
+        if ( p1 == null || p2 == null ){
+            return false ;
+        }
+        return p1.isWhite == p2.isWhite ;
+    }
+
+
+
     public void addPieces() { // ajouter les piéces au plateau
         pieceList.add(new Knight(this, 5, 0, false));
         pieceList.add(new Knight(this, 2, 0, false));
@@ -66,6 +121,16 @@ public class Board extends JPanel {
                 g2D.setColor((c + r) % 2 == 0 ? new Color(184, 184, 158, 255) : new Color(39, 29, 35)); // comme impaire + paire = impaire  ... ça marche on choisi une couleur
                 g2D.fillRect(c * boxSize, r * boxSize, boxSize, boxSize);// on utilise la couleur choisi pour peindre
             }
+        if(selectedPiece != null) {
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < columns; c++) {
+                    if (isValidMove(new Move(this, selectedPiece, c, r))) {
+                        g2D.setColor(new Color(68, 180, 57, 190));
+                        g2D.fillRect(c * boxSize, r * boxSize, boxSize, boxSize);
+                    }
+                }
+            }
+        }
         for (Piece piece : pieceList) {
             piece.paint(g2D);
         }
