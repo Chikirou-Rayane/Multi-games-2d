@@ -18,5 +18,37 @@ import java.awt.image.BufferedImage;
                 this.sprite = sheet.getSubimage(sheetScale*5, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.boxSize, board.boxSize, BufferedImage.SCALE_SMOOTH);
             }
         }
+        public boolean isValidMovement(int col , int row ) {
+            int colorIndex = isWhite ? 1 : -1 ;
+
+            // push pawn (une case en avant)
+            if(this.col == col && row == this.row - colorIndex && board.getPiece(row , col) == null){
+                return true ;
+            }
+
+            // push pawn ( deux cases en avant )
+            if( isFirstMove && this.col == col && row == this.row - colorIndex * 2 && board.getPiece(row , col) == null && board.getPiece(row+colorIndex , col)== null){
+                return true ;
+            }
+
+            // capturer à gauche
+
+            if ( row == this.row-colorIndex && this.col-1 == col && board.getPiece(row,col)!= null  ){
+                return true ;
+            }
+
+            // capturer à droite
+
+            if ( row == this.row-colorIndex && this.col+1 == col && board.getPiece(row,col)!= null  ){
+                return true ;
+            }
+
+            // En passant à gauche
+
+
+
+
+            return false ;}
+
     }
 

@@ -19,6 +19,8 @@ public class Board extends JPanel {
 
     public Piece selectedPiece ;
 
+    public int enPassantTile = -1 ;
+
     ArrayList<Piece> pieceList = new ArrayList<>(); // une liste des pieces sur l'echequier
     public Board() { // un constructeur pour l'echequié
         this.setPreferredSize(new Dimension(rows * boxSize, columns * boxSize));
@@ -38,11 +40,41 @@ public class Board extends JPanel {
 
 
     public void makeMove(Move move) {
-        move.piece.col = move.newCol ;
-        move.piece.row = move.newRow ;
-        move.piece.xPos = move.newCol*boxSize ;
-        move.piece.yPos = move.newRow*boxSize ;
-        move.piece.isFirstMove = false ;
+
+        if ( move.piece.name.equals("Pawn") ) {
+            movePawn(move);
+        }
+        else {
+            move.piece.col = move.newCol;
+            move.piece.row = move.newRow;
+            move.piece.xPos = move.newCol * boxSize;
+            move.piece.yPos = move.newRow * boxSize;
+            move.piece.isFirstMove = false;
+
+            capture(move);
+        }
+    }
+
+    private void movePawn(Move move) {
+
+        // EnPasssant
+
+        int colorIndex = move.piece.isWhite ? 1 : -1 ;
+
+        if (getTileNum(move.newCol, move.newRow) == enPassantTile){
+            move.capture = getPiece(move.newCol , move.newRow - colorIndex) ;
+        }
+
+        if ( Math.abs(move.newRow - move.piece.row) == 2 ){
+            enPassantTile = getTileNum(move.newCol, move.newRow + colorIndex ) ;
+        }
+        else { enPassantTile = -1 ;}
+
+        move.piece.col = move.newCol;
+        move.piece.row = move.newRow;
+        move.piece.xPos = move.newCol * boxSize;
+        move.piece.yPos = move.newRow * boxSize;
+        move.piece.isFirstMove = false;
 
         capture(move);
     }
@@ -113,6 +145,11 @@ public class Board extends JPanel {
         pieceList.add(new Pawn(this , 6 , 1 , false  ) ) ;
         pieceList.add(new Pawn(this , 7 , 1 , false  ) ) ;
     }
+
+    public int getTileNum( int col , int row){
+        return row*rows +col ;
+    }
+
     public void paintComponent(Graphics g) { // réecrire paintComponent de JPanel
         super.paintComponent(g); // prendre ce qui est dans JPanel
         Graphics2D g2D = (Graphics2D) g; // on castre en 2d
