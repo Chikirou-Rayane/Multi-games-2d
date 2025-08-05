@@ -51,7 +51,7 @@ public class Board extends JPanel {
             move.piece.yPos = move.newRow * boxSize;
             move.piece.isFirstMove = false;
 
-            capture(move);
+            capture(move.capture);
         }
     }
 
@@ -62,7 +62,7 @@ public class Board extends JPanel {
         int colorIndex = move.piece.isWhite ? 1 : -1 ;
 
         if (getTileNum(move.newCol, move.newRow) == enPassantTile){
-            move.capture = getPiece(move.newCol , move.newRow - colorIndex) ;
+            move.capture = getPiece(move.newRow + colorIndex , move.newCol  ) ;
         }
 
         if ( Math.abs(move.newRow - move.piece.row) == 2 ){
@@ -70,17 +70,39 @@ public class Board extends JPanel {
         }
         else { enPassantTile = -1 ;}
 
+        // promotions
+
+        colorIndex =move.piece.isWhite ? 0 : 7 ;
+        if (move.newRow == colorIndex){
+            promotionPawn(move) ;
+        }
+
         move.piece.col = move.newCol;
         move.piece.row = move.newRow;
         move.piece.xPos = move.newCol * boxSize;
         move.piece.yPos = move.newRow * boxSize;
         move.piece.isFirstMove = false;
 
-        capture(move);
+        capture(move.capture);
     }
 
-    public void capture (Move move){
-        pieceList.remove(move.capture);
+
+    Piece findKing (boolean isWhite){
+        for( Piece piece : pieceList){
+            if ( isWhite == piece.isWhite && piece.name.equals("King") ){
+                return piece ;
+            }
+        }
+        return null ;
+    }
+
+    private void promotionPawn(Move move) {
+        pieceList.add(new Queen(this , move.newCol , move.newRow, move.piece.isWhite));
+        capture(move.piece);
+    }
+
+    public void capture (Piece piece){
+        pieceList.remove(piece);
     }
 
     public boolean isValidMove(Move move){

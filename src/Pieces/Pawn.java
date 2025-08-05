@@ -44,6 +44,16 @@ import java.awt.image.BufferedImage;
             }
 
             // En passant à gauche
+            if(board.getTileNum(col,row) == board.enPassantTile && col == this.col -1 && row == this.row - colorIndex && board.getPiece(row +colorIndex, col) != null){
+                return true ;
+            }
+
+
+            // En passant à droite
+            if(board.getTileNum(col,row) == board.enPassantTile && col == this.col +1 && row == this.row - colorIndex && board.getPiece(row +colorIndex, col) != null){
+                return true ;
+            }
+
 
 
 
