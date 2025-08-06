@@ -15,6 +15,8 @@ public class Board extends JPanel {
     int rows = 8;
     int columns = 8;
 
+    CheckScanner checkScanner = new CheckScanner(this) ;
+
     Input input = new Input(this) ;
 
     public Piece selectedPiece ;
@@ -114,6 +116,9 @@ public class Board extends JPanel {
              return false ; }
         if ( move.piece.moveCollidesWithPiece(move.newCol,move.newRow)) {
             return false ; }
+        if (checkScanner.kingIsChecked(move)){
+            return false ;
+        }
         return true ;
     }
 
