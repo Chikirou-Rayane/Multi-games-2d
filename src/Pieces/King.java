@@ -1,6 +1,7 @@
 package Pieces;
 
 import main.Board;
+import main.Move;
 
 import java.awt.image.BufferedImage;
 
@@ -18,16 +19,31 @@ public class King extends Piece {
             }
         }
     public boolean isValidMovement( int col , int row ) {
-            return Math.abs ( this.col - col ) <= 1 && Math.abs(this.row - row ) <= 1 && ( Math.abs(this.col-col) + Math.abs(this.row-row ) != 0 ) ;
+            return Math.abs ( this.col - col ) <= 1 && Math.abs(this.row - row ) <= 1 && ( Math.abs(this.col-col) + Math.abs(this.row-row ) != 0 ) || canCastle(col , row) ;
         }
 
     public boolean canCastle ( int col , int row){
 
             if (this.row == row ) {
                 if ( col == 6 ) {
-
+                    Piece rook = board.getPiece(row,7);
+                    if( rook != null && rook.isFirstMove && isFirstMove){
+                        return board.getPiece(row ,5)== null &&
+                                 board.getPiece ( row , 6 ) == null&&
+                                 !board.checkScanner.kingIsChecked(new Move(board , this , 5 , row)) ;
+                    }
+                }
+                else if ( col == 2 ) {
+                    Piece rook = board.getPiece(row,0);
+                    if( rook != null && rook.isFirstMove && isFirstMove){
+                        return board.getPiece(row ,3)== null &&
+                                board.getPiece ( row , 2 ) == null&&
+                                board.getPiece ( row , 1 ) == null&&
+                                !board.checkScanner.kingIsChecked(new Move(board , this , 3 , row)) ;
+                    }
                 }
             }
+
 
 
 

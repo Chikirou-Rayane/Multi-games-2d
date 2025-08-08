@@ -15,7 +15,10 @@ public class Board extends JPanel {
     int rows = 8;
     int columns = 8;
 
-    CheckScanner checkScanner = new CheckScanner(this) ;
+    public CheckScanner checkScanner = new CheckScanner(this) ;
+
+    private boolean isWhiteToMove = true ;
+    private boolean isGameOver = false ;
 
     Input input = new Input(this) ;
 
@@ -46,16 +49,53 @@ public class Board extends JPanel {
         if ( move.piece.name.equals("Pawn") ) {
             movePawn(move);
         }
-        else {
-            move.piece.col = move.newCol;
-            move.piece.row = move.newRow;
-            move.piece.xPos = move.newCol * boxSize;
-            move.piece.yPos = move.newRow * boxSize;
-            move.piece.isFirstMove = false;
+        else if ( move.piece.name.equals("King")){
+            moveKing(move);
+        }
 
-            capture(move.capture);
+        move.piece.col = move.newCol;
+        move.piece.row = move.newRow;
+        move.piece.xPos = move.newCol * boxSize;
+        move.piece.yPos = move.newRow * boxSize;
+        move.piece.isFirstMove = false;
+
+        capture(move.capture);
+
+        isWhiteToMove = !isWhiteToMove ;
+
+        updateGameState() ;
+
+    }
+
+    private void updateGameState() {
+        Piece king = findKing(isWhiteToMove);
+        if ( checkScanner.isGameOver(king) ) {
+            if ( checkScanner.kingIsChecked(new Move(this , king , king.col , king.row ))){
+                System.out.println("GameOver");
+            }
+            else {
+                System.out.println("StaleMate!");
+            }
         }
     }
+
+    private void moveKing(Move move){
+
+        if ( Math.abs(move.piece.col - move.newCol) == 2 ){
+            Piece rook ;
+            if (move.piece.col < move.newCol ){
+                rook = getPiece(move.piece.row , 7 ) ;
+                rook.col = 5 ;
+            } else {
+                rook = getPiece(move.piece.row, 0);
+                rook.col = 3 ;
+            }
+            rook.xPos = rook.col * boxSize ;
+        }
+
+    }
+
+
 
     private void movePawn(Move move) {
 
@@ -79,13 +119,6 @@ public class Board extends JPanel {
             promotionPawn(move) ;
         }
 
-        move.piece.col = move.newCol;
-        move.piece.row = move.newRow;
-        move.piece.xPos = move.newCol * boxSize;
-        move.piece.yPos = move.newRow * boxSize;
-        move.piece.isFirstMove = false;
-
-        capture(move.capture);
     }
 
 
@@ -108,6 +141,14 @@ public class Board extends JPanel {
     }
 
     public boolean isValidMove(Move move){
+
+        if ( isGameOver){
+            return false ;
+        }
+
+        if ( move.piece.isWhite != isWhiteToMove ){
+            return false ;
+        }
 
         if ( sameTeam(move.piece , move.capture )){
             return false ;

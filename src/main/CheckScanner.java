@@ -121,4 +121,23 @@ public class CheckScanner {
         return p != null && !board.sameTeam(p,k) && p.name.equals("Pawn")&&!(p.col == col && p.row == row) ;
     }
 
+    public boolean isGameOver(Piece king ){
+        for ( Piece piece : board.pieceList) {
+            if ( board.sameTeam(king , piece)) {
+                board.selectedPiece = piece == king ? king : null ;
+                for ( int col = 0 ; col < board.columns ; col++ ){
+                    for ( int row = 0 ; row < board.rows ; row ++ ){
+                        Move move = new Move ( board , piece , col ,  row);
+                        if ( board.isValidMove(move)){
+                            return false ;
+                        }
+                    }
+                }
+            }
+        }
+        return true ;
+    }
+
+
 }
+
