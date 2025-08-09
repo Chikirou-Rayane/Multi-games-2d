@@ -1,10 +1,10 @@
-package Pieces;
+package Echecs.main.Pieces;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException ;
-import java.util.Objects;
-import main.Board ;
+
+import Echecs.main.Board ;
 public class Piece {
     public int col, row;
     public int xPos, yPos;

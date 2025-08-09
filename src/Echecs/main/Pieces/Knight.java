@@ -1,5 +1,5 @@
-package Pieces;
-import main.Board ;
+package Echecs.main.Pieces;
+import Echecs.main.Board ;
 
 import java.awt.image.BufferedImage;
 public class Knight extends Piece {

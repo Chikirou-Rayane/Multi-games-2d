@@ -1,4 +1,4 @@
-package main;
+package Echecs.main;
 
 import javax.swing.* ;
 import java.awt.*;

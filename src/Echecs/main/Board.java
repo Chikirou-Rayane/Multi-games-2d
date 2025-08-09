@@ -1,12 +1,13 @@
-package main;
+package Echecs.main;
 
 // on crée une classe pour le plateau
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
-import Pieces.*;
+import Echecs.main.Pieces.*;
 
 
 public class Board extends JPanel {
@@ -76,8 +77,22 @@ public class Board extends JPanel {
             else {
                 System.out.println("StaleMate!");
             }
+        } else if (insuffMaterial(true) && insuffMaterial(false)){
+            System.out.println("nulle");
+            isGameOver=true ;
         }
     }
+
+    private boolean insuffMaterial (boolean isWhite){
+        ArrayList<String> names = pieceList.stream().filter(p->p.isWhite  == isWhite )
+                .map(p->p.name)
+                .collect(Collectors.toCollection(ArrayList::new)) ;
+        if ( names.contains("Queen") ||names.contains("Rook")||names.contains("Pawn") ){
+            return false ;
+        }
+        return names.size()<3 ;
+    }
+
 
     private void moveKing(Move move){
 
@@ -173,15 +188,16 @@ public class Board extends JPanel {
 
 
     public void addPieces() { // ajouter les piéces au plateau
-        pieceList.add(new Knight(this, 5, 0, false));
-        pieceList.add(new Knight(this, 2, 0, false));
-        pieceList.add(new Knight(this, 5, 7, true));
-        pieceList.add(new Knight(this, 2, 7, true));
 
-        pieceList.add(new Bishop(this, 6, 0, false));
-        pieceList.add(new Bishop(this, 1, 0, false));
-        pieceList.add(new Bishop(this, 6, 7, true));
-        pieceList.add(new Bishop(this, 1, 7, true));
+        pieceList.add(new Knight(this, 6, 0, false));
+        pieceList.add(new Knight(this, 1, 0, false));
+        pieceList.add(new Knight(this, 6, 7, true));
+        pieceList.add(new Knight(this, 1, 7, true));
+
+        pieceList.add(new Bishop(this, 5, 0, false));
+        pieceList.add(new Bishop(this, 2, 0, false));
+        pieceList.add(new Bishop(this, 5, 7, true));
+        pieceList.add(new Bishop(this, 2, 7, true));
 
         pieceList.add(new Rock(this , 7, 0 , false ));
         pieceList.add(new Rock(this , 0, 7 , true ));

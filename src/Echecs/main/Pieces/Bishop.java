@@ -1,6 +1,6 @@
-package Pieces;
+package Echecs.main.Pieces;
 
-import main.Board;
+import Echecs.main.Board;
 
 import java.awt.image.BufferedImage;
 

@@ -1,6 +1,6 @@
-package main;
+package Echecs.main;
 
-import Pieces.Piece;
+import Echecs.main.Pieces.Piece;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
